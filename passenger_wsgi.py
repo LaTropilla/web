@@ -1,0 +1,1 @@
+from pindomia.wsgi import application

@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    width: 90vw;
+    color: #333;
+    margin: 5vw;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #71855f;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.datos-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.datos-columna {
+    flex: 1;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+h2 {
+    color: #71855f;
+    margin: 20px 0;
+}
+
+p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+#map-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+#map {
+    height: 350px;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+#editar-direccion-form {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+input[type="text"], select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #71855f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 250px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #235c49;
+}
+
+#editar-direccion {
+    display: block;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #71855f;
+    color: white;
+    margin-top: 20px;
+}
+

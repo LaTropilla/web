@@ -1,0 +1,27 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+  <h1>Análisis de Datos</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tour</th>
+        <th>Total de Reservas</th>
+        <th>Total de Adultos</th>
+        <th>Total de Niños</th>
+        <th>Total Recaudado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in analisis %}
+        <tr>
+          <td>{{ item.tour }}</td>
+          <td>{{ item.total_reservas }}</td>
+          <td>{{ item.total_adultos }}</td>
+          <td>{{ item.total_ninos }}</td>
+          <td>${{ item.total_recaudado }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

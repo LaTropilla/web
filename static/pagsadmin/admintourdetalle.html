@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section class="container tarjetas-tours">
+        <h1 class="heading-1">Encuentra tu próximo destino</h1>
+        <div id="tarjetas-container" class="container-categories">
+            <!-- Aquí se cargarán dinámicamente las tarjetas de tours -->
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/tours')
+                .then(response => response.json())
+                .then(tours => {
+                    const container = document.getElementById('tarjetas-container');
+                    tours.forEach(tour => {
+                        const card = document.createElement('div');
+                        card.classList.add('container-categories');
+
+                        card.innerHTML = `
+                            <div class="card-category" style="background-image: url(./imagenes/tours/${tour.imagen}); background-size: cover; background-position: center;">
+                                <p class="nombre-tour">${tour.nombre}</p>
+                                <button onclick="Editar(${tour.id})">Ver más</button>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error cargando los tours:', error));
+        });
+        function verMas(id) {
+        window.location.href = `/pagsadmin/editardetalletour.html?id=${id}`;
+        }
+    </script>
+</body>
+</html>

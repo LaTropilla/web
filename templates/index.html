@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDOMIA</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+<link rel="stylesheet" href="{% static 'estilos/responsive.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="{% static 'imagenes/index/logoverde.png' %}" alt="Logo de la empresa">
+                </div>
+                <div class="container-navbar">
+                    <nav class="navbar container">
+                        <button class="menu-toggle">
+                            <img src="/static/imagenes/iconos/menu.png" alt="Menu">
+                        </button>
+                        <nav class="navbar container">
+                            <i class="fa-solid fa-bars"></i>
+                            <ul class="menu">
+                                <li><a href="{% url 'index' %}">Inicio</a></li>
+                                <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                                <li><a href="{% url 'trasladoshtml' %}">Traslados</a></li>
+                                <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                            </ul>
+                        </nav>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="banner">
+        <div class="content-banner">
+            <p>Descubre la belleza de la Patagonia.</p>
+            <h2>Reserva tu aventura<br>en la Patagonia ahora.</h2>
+            <div class="search-bar">
+                <form class="search-form" id="search-form">
+                    <div class="search-row">
+                        <div class="search-field">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="tour-desde">
+                                <option value="" disabled selected>Tomar tour desde</option>
+                                <option value="Punta Arenas">Punta Arenas</option>
+                                <option value="Puerto Natales">Puerto Natales</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-row">
+                        <div class="search-field">
+                            <i class="fas fa-mountain"></i>
+                            <select id="dificultad">
+                                <option value="" disabled selected>Dificultad</option>
+                                <option value="Baja">Baja</option>
+                                <option value="Moderada">Moderada</option>
+                                <option value="Alta">Alta</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <i class="fas fa-clock"></i>
+                            <select id="jornada">
+                                <option value="" disabled selected>Duración del tour</option>
+                                <option value="medio dia">Medio día</option>
+                                <option value="dia completo">Día completo</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="range" id="precio" min="0" max="1000" step="1000" value="1000">
+                            <span id="precio-valor">$1000</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        
+        <div class="carrito" id="carrito" style="display: none;">
+            <h4>Carrito de Reservas</h4>
+            <div id="carrito-items"></div>
+            <button onclick="confirmarReservas()">Confirmar reserva y pagar</button>
+        </div>
+
+        <section class="container tarjetas-tours">
+            <h1 class="heading-1">Encuentra tu próximo destino</h1>
+            <div id="tarjetas-container" class="container-categories">
+                <!-- Aquí se cargarán dinámicamente las tarjetas de tours -->
+            </div>
+        </section>
+
+
+        <section class="container comments-boxes">
+            <h1 class="title-slider">La aventura te espera</h1>
+            <div class="slider">
+                <div class="slider-track">
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent1.jfif' %}" alt="Avistamiento de fauna">
+                        <h3>Avistamiento de fauna</h3>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent2.jfif' %}" alt="Trekkin">
+                        <h3>Trekkin</h3>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent3.jfif' %}" alt="Kayak">
+                        <h3>Kayak</h3>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent4.jfif' %}" alt="Kiosco Roca">
+                        <h3>Kiosco Roca</h3>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent5.jfif' %}" alt="Cueva del milodón">
+                        <h3>Cueva del milodón</h3>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'imagenes/aventuras/avent6.jfif' %}" alt="Deportes de nieve">
+                        <h3>Deportes de nieve</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mifooter">
+        <div class="footer-content">
+            <div class="newsletter">
+                <h2 class="newsletter-title">Suscríbete a nuestro boletín</h2>
+                <form class="newsletter-form" action="#" method="post">
+                    <input type="email" name="email" class="newsletter-input"
+                        placeholder="Ingresa tu correo electrónico" required>
+                    <button type="submit" class="newsletter-button">Suscribirse</button>
+                </form>
+            </div>
+            <div class="social-media">
+                    <!-- wsp -->
+                    <a class="social-btn" href="https://wa.me/1234567890" role="button" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <!-- Google -->
+                    <a class="social-btn" href="mailto:contacto@patagoniaindomia.cl" role="button"><i class="fas fa-envelope"></i></a>
+                    <!-- Instagram -->
+                    <a class="social-btn" href="https://www.instagram.com/patagoniaindomia/" role="button"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <a class="manual" href="media/manual/Manual.pdf">¿Cómo realizar una reserva?</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+
+
+    <script>
+       
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/tours')
+                .then(response => response.json())
+                .then(tours => {
+                    const container = document.getElementById('tarjetas-container');
+                    container.innerHTML = ''; // Limpiar contenedor antes de agregar tarjetas
+
+                    tours.forEach(tour => {
+                        const card = document.createElement('div');
+                        card.classList.add('container-categories');
+
+                        card.innerHTML = `
+                            <div class="card-category" style="background-image: url('/media/${tour.imagen}');">
+                                <img src="/media/${tour.imagen}" alt="${tour.nombre}">
+                                <div class="content">
+                                    <p class="nombre-tour">${tour.nombre}</p>
+                                    <p class="ubicacion-tour"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;${tour.ubicacion}</p>
+                                    <div class="tour-informacion">
+                                        <p class="desde">Desde </p>
+                                        <p class="precio-tour">$${tour.precio}</p>
+                                    </div>
+                                    <button onclick="verMas(${tour.id})">Ver más</button>
+                                </div>
+                            </div>
+
+                            `;
+                        container.appendChild(card);
+                    });
+
+                    // Configurar el rango de precios
+                    const precioInput = document.getElementById('precio');
+                    const precioValor = document.getElementById('precio-valor');
+
+                    let precioMinimo = Math.min(...tours.map(tour => tour.precio));
+                    let precioMaximo = Math.max(...tours.map(tour => tour.precio));
+
+                    precioInput.min = precioMinimo;
+                    precioInput.max = precioMaximo;
+                    precioInput.value = precioMaximo;
+
+                    precioValor.textContent = `$${precioMaximo.toLocaleString()}`;
+
+                    precioInput.addEventListener('input', function () {
+                        precioValor.textContent = `$${this.value.toLocaleString()}`;
+                    });
+                })
+                .catch(error => console.error('Error cargando los tours:', error));
+
+            document.getElementById('search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const tourDesde = document.getElementById('tour-desde').value;
+                const dificultad = document.getElementById('dificultad').value;
+                const jornada = document.getElementById('jornada').value;
+                const precioMaximo = document.getElementById('precio').value;
+
+                const params = new URLSearchParams();
+                if (tourDesde) params.append('tour_desde', tourDesde);
+                if (dificultad) params.append('dificultad', dificultad);
+                if (jornada) params.append('jornada', jornada);
+                if (precioMaximo) params.append('precio_maximo', precioMaximo);
+
+                fetch(`/api/filtrotours?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(tours => {
+                        const container = document.getElementById('tarjetas-container');
+                        container.innerHTML = '';
+
+                        tours.forEach(tour => {
+                            const card = document.createElement('div');
+                            card.classList.add('container-categories');
+
+                            card.innerHTML = `
+                                <div class="card-category" style="background-image: url(/media/${tour.imagen}); background-size: cover; background-position: center;">
+                                    <p class="nombre-tour">${tour.nombre}</p>
+                                    <p class="ubicacion-tour"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;${tour.ubicacion}</p>
+                                    <div class="tour-informacion">
+                                        <p class="desde">Desde </p>
+                                        <p class="precio-tour">$${tour.precio}</p>
+                                    </div>
+                                    <button onclick="verMas(${tour.id})">Ver más</button>
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    })
+                    .catch(error => console.error('Error filtrando los tours:', error));
+            });
+        });
+
+        function verMas(id) {
+            localStorage.setItem('tour.id', id);
+            window.location.href = `/tourdetalle/${id}`;
+        }
+
+    </script>
+    <script src="https://kit.fontawesome.com/81581fb069.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('.menu');
+
+            menuToggle.addEventListener('click', function () {
+                menu.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

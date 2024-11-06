@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traslados</title>
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/responsive.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="/static/imagenes/index/logoverde.png" alt="Logo de la empresa">
+                </div>
+                <div class="container-navbar">
+                    <nav class="navbar container">
+                        <button class="menu-toggle">
+                            <img src="/static/imagenes/iconos/menu.png" alt="Menu">
+                        </button>
+                        <ul class="menu">
+                            <li><a href="{% url 'index' %}">Inicio</a></li>
+                            <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                            <li><a href="">Traslados</a></li>
+                            <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="transfers">
+            <h2>Paquetes de Traslados</h2>
+
+            <div class="transfer-package">
+                <h3>Punta Arenas Urbano</h3>
+                <p>Traslados dentro de la ciudad de Punta Arenas.</p>
+                <ul>
+                    <li><strong>Para 4 personas:</strong> $40,000 CLP</li>
+                    <li><strong>Para 9 personas:</strong> $70,000 CLP</li>
+                </ul>
+            </div>
+
+            <div class="transfer-package">
+                <h3>Punta Arenas Alrededores</h3>
+                <p>Traslados a lugares cercanos como el Aeropuerto, Fuerte Bulnes, etc.</p>
+                <ul>
+                    <li><strong>Para 4 personas:</strong> $60,000 CLP</li>
+                    <li><strong>Para 9 personas:</strong> $120,000 CLP</li>
+                </ul>
+            </div>
+
+            <div class="transfer-package">
+                <h3>Puerto Natales</h3>
+                <p>Traslados a Puerto Natales desde Punta Arenas.</p>
+                <ul>
+                    <li><strong>Para 4 personas:</strong> $120,000 CLP</li>
+                    <li><strong>Para 9 personas:</strong> $220,000 CLP</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mifooter">
+        <div class="footer-content">
+            <div class="newsletter">
+                <h2 class="newsletter-title">Suscribete a nuestro boletin</h2>
+                <form class="newsletter-form" action="#" method="post">
+                </form>
+            </div>
+            <div class="social-media">
+                
+                    <!-- Facebook -->
+                    <a class="social-btn" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+                    <!-- wsp -->
+                    <a class="social-btn" href="https://wa.me/1234567890" role="button" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <!-- Google -->
+                    <a class="social-btn" href="mailto:contacto@patagoniaindomia.cl" role="button"><i class="fas fa-envelope"></i></a>
+                    <!-- Instagram -->
+                    <a class="social-btn" href="https://www.instagram.com/patagoniaindomia/" role="button"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/tours')
+                .then(response => response.json())
+                .then(tours => {
+                    const container = document.getElementById('tarjetas-container');
+                    container.innerHTML = ''; // Limpiar contenedor antes de agregar tarjetas
+
+                    tours.forEach(tour => {
+                        const card = document.createElement('div');
+                        card.classList.add('container-categories');
+
+                        card.innerHTML = `
+                            <div class="card-category" style="background-image: url('/media/${tour.imagen}');">
+                                <img src="/media/${tour.imagen}" alt="${tour.nombre}">
+                                <div class="content">
+                                    <p class="nombre-tour">${tour.nombre}</p>
+                                    <p class="ubicacion-tour"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;${tour.ubicacion}</p>
+                                    <div class="tour-informacion">
+                                        <p class="desde">Desde </p>
+                                        <p class="precio-tour">$${tour.precio}</p>
+                                    </div>
+                                    <button onclick="verMas(${tour.id})">Ver más</button>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error cargando los tours:', error));
+        });
+
+        function verMas(id) {
+            localStorage.setItem('tour.id', id);
+            window.location.href = `/tourdetalle/${id}`;
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('.menu');
+
+            menuToggle.addEventListener('click', function () {
+                menu.classList.toggle('active');
+            });
+        });
+    </script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

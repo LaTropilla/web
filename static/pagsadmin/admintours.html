@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Tours</title>
+    <style>
+        /* Estilos para mejorar la presentación */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+        }
+        .administrartours {
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .administrartours table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .administrartours table, .administrartours th, .administrartours td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .administrartours th {
+            background-color: #f4f4f4;
+        }
+        .administrartours td img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .administrartours .accion {
+            text-align: center;
+        }
+        .administrartours .accion button {
+            border-radius: 20px;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-right: 5px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .administrartours .accion button:hover {
+            background-color: #0056b3;
+        }
+        .nuevo-tour {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .nuevo-tour input[type="text"],
+        .nuevo-tour input[type="number"],
+        .nuevo-tour select {
+            width: 50%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .nuevo-tour button {
+            width: 50%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .nuevo-tour button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button onclick="location.href='/pagsadmin/admin.html'">Volver</button>
+        <h1>Administrar Tours</h1>
+    </div>
+    <section class="administrartours">
+        <!-- Tabla de tours existentes -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio adultos</th>
+                    <th>Precio niños</th>
+                    <th>Ubicación</th>
+                    <th>Dificultad</th>
+                    <th>Tiempo</th>
+                    <th>Jornada</th>
+                    <th>Imagen</th>
+                    <th>Tour desde</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="listaTours"></tbody>
+        </table>
+
+        <button onclick="mostrarFormulario()">Agregar Tour</button>
+
+        <div class="nuevo-tour" id="nuevoTourForm" style="display: none;">
+            <h3>Nuevo Tour</h3>
+            <input type="text" id="nombre" placeholder="Nombre" required />
+            <input type="number" id="precio" placeholder="Precio" required />
+            <input type="number" id="precio_nino" placeholder="Precio menores de 15" required />
+            <input type="text" id="ubicacion" placeholder="Ubicación" required />
+            <select id="dificultad" required>
+                <option value="" disabled selected>Dificultad</option>
+                <option value="baja">Baja</option>
+                <option value="moderada">Moderada</option>
+                <option value="alta">Alta</option>
+            </select>
+            <input type="text" id="tiempo" placeholder="Tiempo" required />
+            <select id="jornada" required>
+                <option value="" disabled selected>Jornada</option>
+                <option value="medio día">Medio Día</option>
+                <option value="día completo">Día Completo</option>
+            </select>
+            <input type="text" id="imagen" placeholder="Nombre imagen" required />
+            <input type="text" id="tour_desde" placeholder="Tour desde" required />
+            <button onclick="agregarTour()">Agregar Tour</button>
+        </div>
+    </section>
+
+    <script>
+        // Función para mostrar el formulario de nuevo tour
+        function mostrarFormulario() {
+            document.getElementById('nuevoTourForm').style.display = 'block';
+        }
+
+        // Función para cargar y mostrar la lista de tours
+        function cargarTours() {
+            fetch('/api/tours')
+                .then(response => response.json())
+                .then(data => {
+                    const listaTours = document.getElementById('listaTours');
+                    listaTours.innerHTML = '';
+                    data.forEach(tour => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${tour.nombre}</td>
+                            <td>${tour.precio}</td>
+                            <td>${tour.precio_nino}</td>
+                            <td>${tour.ubicacion}</td>
+                            <td>${tour.dificultad}</td>
+                            <td>${tour.tiempo}</td>
+                            <td>${tour.jornada}</td>
+                            <td>${tour.imagen}</td>
+                            <td>${tour.tour_desde}</td>
+                            <td class="accion">
+                                <button onclick="editarTour(this, ${tour.id})">Editar</button>
+                                <button onclick="eliminarTour(${tour.id})">Eliminar</button>
+                            </td>
+                        `;
+                        listaTours.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error al cargar tours:', error));
+        }
+
+        // Función para agregar un nuevo tour
+        function agregarTour() {
+            const nombre = document.getElementById('nombre').value;
+            const precio = document.getElementById('precio').value;
+            const precio_nino = document.getElementById('precio_nino').value;
+            const ubicacion = document.getElementById('ubicacion').value;
+            const dificultad = document.getElementById('dificultad').value;
+            const tiempo = document.getElementById('tiempo').value;
+            const jornada = document.getElementById('jornada').value;
+            const imagen = document.getElementById('imagen').value;
+            const tour_desde = document.getElementById('tour_desde').value;
+
+            // Validar que todos los campos están llenos
+            if (!nombre || !precio || !precio_nino || !ubicacion || !dificultad || !tiempo || !jornada || !imagen|| !tour_desde) {
+                alert('Por favor, complete todos los campos.');
+                return;
+            }
+
+            const nuevoTour = {
+                nombre,
+                precio,
+                precio_nino,
+                ubicacion,
+                dificultad,
+                tiempo,
+                jornada,
+                imagen
+            };
+
+            fetch('/api/tours', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevoTour)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Tour agregado correctamente');
+                    cargarTours(); // Actualizar lista de tours
+                    // Limpiar el formulario
+                    document.getElementById('nuevoTourForm').style.display = 'none';
+                    document.getElementById('nombre').value = '';
+                    document.getElementById('precio').value = '';
+                    document.getElementById('precio_nino').value = '';
+                    document.getElementById('ubicacion').value = '';
+                    document.getElementById('dificultad').value = '';
+                    document.getElementById('tiempo').value = '';
+                    document.getElementById('jornada').value = '';
+                    document.getElementById('imagen').value = '';
+                    document.getElementById('tour_desde').value = '';
+                } else {
+                    throw new Error('Error al agregar el tour');
+                }
+            })
+            .catch(error => console.error('Error al agregar tour:', error));
+        }
+
+        // Función para cambiar entre edición y vista
+        function editarTour(button, id) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+
+            if (button.textContent === 'Editar') {
+                // Cambiar a modo edición
+                button.textContent = 'Guardar';
+                cells.forEach((cell, index) => {
+                    if (index < 8) { // Excepto la última columna de acciones
+                        const value = cell.textContent;
+                        if (index === 4) { // Dificultad
+                            cell.innerHTML = `
+                                <select>
+                                    <option value="baja" ${value === 'baja' ? 'selected' : ''}>baja</option>
+                                    <option value="moderada" ${value === 'moderada' ? 'selected' : ''}>moderada</option>
+                                    <option value="alta" ${value === 'alta' ? 'selected' : ''}>alta</option>
+                                </select>
+                            `;
+                        } else if (index === 6) { // Jornada
+                            cell.innerHTML = `
+                                <select>
+                                    <option value="medio día" ${value === 'medio día' ? 'selected' : ''}>medio día</option>
+                                    <option value="día completo" ${value === 'día completo' ? 'selected' : ''}>día completo</option>
+                                </select>
+                            `;
+                        } else {
+                            cell.innerHTML = `<input type="text" value="${value}" />`;
+                        }
+                    }
+                });
+            } else {
+                // Cambiar a modo vista y guardar cambios
+                const updatedTour = {
+                    nombre: cells[0].querySelector('input').value,
+                    precio: cells[1].querySelector('input').value,
+                    precio_nino: cells[2].querySelector('input').value,
+                    ubicacion: cells[3].querySelector('input').value,
+                    dificultad: cells[4].querySelector('select').value,
+                    tiempo: cells[5].querySelector('input').value,
+                    jornada: cells[6].querySelector('select').value,
+                    imagen: cells[7].querySelector('input').value,
+                };
+
+                fetch(`/api/tours/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedTour)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Tour actualizado correctamente');
+                        cargarTours(); // Actualizar lista de tours
+                    } else {
+                        throw new Error('Error al actualizar el tour');
+                    }
+                })
+                .catch(error => console.error('Error al actualizar tour:', error));
+            }
+        }
+
+        // Función para eliminar un tour
+        function eliminarTour(id) {
+            if (confirm('¿Estás seguro de eliminar este tour?')) {
+                fetch(`/api/tours/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Tour eliminado correctamente');
+                        cargarTours(); // Actualizar lista de tours
+                    } else {
+                        throw new Error('Error al eliminar el tour');
+                    }
+                })
+                .catch(error => console.error('Error al eliminar tour:', error));
+            }
+        }
+
+        // Cargar lista de tours al cargar la página
+        cargarTours();
+    </script>
+</body>
+</html>

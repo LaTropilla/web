@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Reserva</title>
+</head>
+<body>
+    <h1>Datos del Tour</h1>
+    <p><strong>Nombre del Tour:</strong> <span id="nombre_tour"></span></p>
+    <p><strong>Fecha del Tour:</strong> <span id="fecha_tour"></span></p>
+    <p><strong>Dirección de Recogida:</strong> <span id="direccion_recogida"></span></p>
+    <p><strong>Ciudad de Recogida:</strong> <span id="ciudad_recogida"></span></p>
+    <p><strong>Cantidad de Adultos:</strong> <span id="cantidad_adultos"></span></p>
+    <p><strong>Cantidad de Niños:</strong> <span id="cantidad_ninos"></span></p>
+    <p><strong>Precio Total:</strong> <span id="precio_total"></span></p>
+
+    <h1>Datos del Turista</h1>
+    <p><strong>Nombre:</strong> <span id="nombre_turista"></span></p>
+    <p><strong>RUT/Pasaporte:</strong> <span id="rut_turista"></span></p>
+    <p><strong>Email:</strong> <span id="mail_turista"></span></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Cargar los datos almacenados en localStorage
+            document.getElementById('nombre_tour').innerText = localStorage.getItem('nombre_tour');
+            document.getElementById('fecha_tour').innerText = localStorage.getItem('fecha_tour');
+            document.getElementById('direccion_recogida').innerText = localStorage.getItem('direccion_recogida');
+            document.getElementById('ciudad_recogida').innerText = localStorage.getItem('ciudad_recogida');
+            document.getElementById('cantidad_adultos').innerText = localStorage.getItem('cantidad_adultos');
+            document.getElementById('cantidad_ninos').innerText = localStorage.getItem('cantidad_ninos');
+            document.getElementById('precio_total').innerText = localStorage.getItem('precio_total');
+            document.getElementById('nombre_turista').innerText = localStorage.getItem('nombre_turista');
+            document.getElementById('rut_turista').innerText = localStorage.getItem('rut_turista');
+            document.getElementById('mail_turista').innerText = localStorage.getItem('mail_turista');
+        });
+    </script>
+</body>
+</html>

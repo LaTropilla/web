@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/tourstyles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/responsive.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+
+<body>
+    <div class="detalles-tour">
+        <header>
+            <div class="container-hero">
+                <div class="container hero">
+                    <div class="logo">
+                        <img src="{% static 'imagenes/index/logoverde.png' %}" alt="Logo de la empresa">
+                    </div>
+                    <div class="container-navbar">
+                        <button class="menu-toggle">
+                            <img src="/static/imagenes/iconos/menu.png" alt="Menu">
+                        </button>
+                        <nav class="navbar container">
+                            <ul class="menu">
+                                <li><a href="{% url 'index' %}">Inicio</a></li>
+                                <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                                <li><a href="{% url 'trasladoshtml' %}">Traslados</a></li>
+                                <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+
+        <main class="main-content">
+            <div class="titular">
+                <h1 class="title-page" id="titulo-tour">{{ titulo }}</h1>
+                <div class="subtitle">
+                    <img src="{% static 'imagenes/iconos/trekking.png' %}" alt="icono" class="icon">
+                    <h3 class="subtitle-page" id="subtitulo-tour">{{ tipo_actividad }}</h3>
+                </div>
+            </div>
+
+            <div class="info-line">
+                <div class="element">
+                    <img src="{% static 'imagenes/iconos/dificultad.png' %}" alt="icono" class="icon"> Dificultad: <span
+                    id="dificultad-tour">{{ dificultad }}</span> <span style="margin-left: 40px;"></span>
+                </div>
+                <div class="element">
+                    <img src="{% static 'imagenes/iconos/sol.png' %}" alt="icono" class="icon"> Jornada: <span
+                    id="jornada-tour">{{ jornada }}</span> 
+
+                </div>
+                <div class="element">
+                    <img src="{% static 'imagenes/iconos/pasador-de-ubicacion.png' %}" alt="icono" class="icon"> Ubicación:
+                <span id="ubicacion-tour">{{ ubicacion }}</span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <p class="divider">------------------------------------------------</p>
+            <div class="slideshow">
+                <div class="slideshow-container" id="contenedor-slideshow">
+                    <div class="mySlides fade">
+                        <div class="numbertext">1 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt1.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">2 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt2.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">3 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt3.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">4 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt4.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">5 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt5.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">6 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt6.jpg' %}" style="width:100%">
+                    </div>
+                </div>
+                <br>
+                <div style="text-align:center" id="contenedor-dots">
+                    <span class="dot" onclick="slideActual(1)"></span>
+                    <span class="dot" onclick="slideActual(2)"></span>
+                    <span class="dot" onclick="slideActual(3)"></span>
+                    <span class="dot" onclick="slideActual(4)"></span>
+                    <span class="dot" onclick="slideActual(5)"></span>
+                    <span class="dot" onclick="slideActual(6)"></span>
+                </div>
+            </div>
+
+            <div class="info-page">
+                <div class="side-bar-page">
+                    <div class="calendarReserva">
+                        <h3>¡Reserva ahora!</h3>
+                        <input type="date" id="fecha" name="fecha" min="">
+                        <div class="price-info" id="info-precios" style="display:none;">
+                            <div class="price-item">
+                                <span>Adultos</span>
+                                <button onclick="actualizarCantidad('adultos', -1)">-</button>
+                                <input type="number" id="cantidad-adultos" value="1" min="1" onchange="calcularTotal()">
+                                <button onclick="actualizarCantidad('adultos', 1)">+</button>
+                                <span id="precio-adulto">$ {{ precio_adulto }}</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Menores de 15</span>
+                                <button onclick="actualizarCantidad('ninos', -1)">-</button>
+                                <input type="number" id="cantidad-ninos" value="0" min="0" onchange="calcularTotal()">
+                                <button onclick="actualizarCantidad('ninos', 1)">+</button>
+                                <span id="precio-nino">$ {{ precio_nino }}</span>
+                            </div>
+                            <div class="total-price">
+                                <span>Total: </span>
+                                <span id="precio-total">$ {{ precio_adulto }}</span>
+                            </div>
+                        </div>
+                        <button onclick="verificarFecha()">Reservar</button>
+
+                    </div>
+
+
+                    <button class="titulo-itinerario" type="button" id="boton-itinerario" data-toggle="collapse"
+                        data-target="#colapsoItinerario" aria-expanded="false" aria-controls="colapsoItinerario">
+                        Itinerario
+                    </button>
+                    <div class="collapse mt-3" id="colapsoItinerario">
+                        <!-- Aquí se carga el itinerario dinámicamente -->
+                    </div>
+                </div>
+                <div class="content-page">
+                    <p id="descripcion-tour">{{ descripcion }}</p>
+                    <iframe id="mapa-tour" src="{{ url_mapa }}" width="100%" height="250" style="border:0;"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <!-- Modal de reserva -->
+    <div id="reservaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div class="modal-body">
+                <h2>Confirmar reserva y pagar</h2>
+                <input type="text" id="nombre_turista" placeholder="Nombre" required>
+                <!-- Nuevo selector de tipo de documento -->
+                <label for="tipo_documento">Elija documento de identidad:</label>
+                <select id="tipo_documento" onchange="actualizarPlaceholder()">
+                    <option value="rut">Rut chileno</option>
+                    <option value="pasaporte">Pasaporte</option>
+                </select>
+
+                <!-- Ajuste del campo de documento -->
+                <input type="text" id="rut_turista" placeholder="Ingrese su Rut chileno" required>
+                
+                <input type="email" id="mail_turista" placeholder="Email" required>
+                <input type="text" id="direccion_recogida" placeholder="Dirección de recogida" required>
+                <select id="ciudad_recogida" required>
+                    <option value="">Seleccione Ciudad</option>
+                    <option value="Puerto Natales">Puerto Natales</option>
+                    <option value="Punta Arenas">Punta Arenas</option>
+                </select>
+
+                <div class="terms">
+                    <button class="terms-toggle" onclick="toggleTerms()">Términos y Condiciones</button>
+                    <div class="terms-content hidden">
+                        <p>Por favor, revisa detenidamente estos Términos y Condiciones antes de utilizar los servicios
+                            ofrecidos en nuestro sitio web. Al acceder y utilizar los servicios de Patagonia Indomia,
+                            aceptas haber leído, comprendido y aceptado estos términos. Si no estás de acuerdo, por
+                            favor,
+                            no utilices nuestros servicios.</p>
+                        <ul>
+                            <li><strong>Contrato de Tour:</strong> Patagonia Indomia es una agencia de turismo chilena
+                                con
+                                domicilio en Punta Arenas, Chile. Actuamos como operador minorista de tours, gestionando
+                                y
+                                organizando paquetes turísticos que pueden incluir transporte y alojamiento, ya sea
+                                directamente o a través de terceros proveedores.</li>
+                            <li><strong>Reserva y Pago:</strong> Debe ser pagado el 100% del precio total antes del
+                                inicio
+                                del tour. El paquete solo se considerará reservado cuando el 100% del pago haya sido
+                                realizado.</li>
+                            <li><strong>Documentación Requerida:</strong> Documentos necesarios para pasajeros
+                                nacionales e
+                                internacionales. Ver detalles específicos.</li>
+                            <li><strong>Retiro por Parte del Cliente y Cambios a la Reserva:</strong> Políticas de
+                                cancelación y cambios en la reserva.</li>
+                            <li><strong>Limitación de Responsabilidad:</strong> Exención de responsabilidad de Patagonia
+                                Indomia por ciertos incidentes.</li>
+                            <li><strong>Seguro:</strong> Recomendación de contratar un seguro de viaje y la exención de
+                                responsabilidad por condiciones médicas no declaradas.</li>
+                            <li><strong>Obligación a Colaborar:</strong> Comportamiento y colaboración durante el tour.
+                            </li>
+                            <li><strong>Ineficacia de Regulaciones Individuales:</strong> Validez de las cláusulas del
+                                acuerdo.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="terms-agreement">
+                    <input type="checkbox" id="accept_terms" onchange="toggleConfirmButton()">
+                    <label for="accept_terms">Acepto los Términos y Condiciones</label>
+                </div>
+
+                <button id="confirmar_reserva" onclick="confirmarReserva()" style="display: none;">Confirmar reserva y
+                    pagar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mifooter">
+        <div class="footer-content">
+            <div class="newsletter">
+                <h2 class="newsletter-title">Suscríbete a nuestro boletín</h2>
+                <form class="newsletter-form" action="#" method="post">
+                    <input type="email" name="email" class="newsletter-input"
+                        placeholder="Ingresa tu correo electrónico" required>
+                    <button type="submit" class="newsletter-button">Suscribirse</button>
+                </form>
+            </div>
+            <div class="social-media">
+                
+                    <!-- Facebook -->
+                    <a class="social-btn" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+                    <!-- wsp -->
+                    <a class="social-btn" href="https://wa.me/1234567890" role="button" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <!-- Google -->
+                    <a class="social-btn" href="mailto:contacto@patagoniaindomia.cl" role="button"><i class="fas fa-envelope"></i></a>
+                    <!-- Instagram -->
+                    <a class="social-btn" href="https://www.instagram.com/patagoniaindomia/" role="button"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <a class="manual" href="media/manual/Manual.pdf">Nuestro Manual de Usuario</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+
+
+    <script>
+        function actualizarPlaceholder() {
+            const docType = document.getElementById("tipo_documento").value;
+            const docNumberInput = document.getElementById("rut_turista");
+            if (docType === "rut") {
+                docNumberInput.placeholder = "Ingrese su Rut chileno";
+            } else if (docType === "pasaporte") {
+                docNumberInput.placeholder = "Ingrese su Pasaporte";
+            }
+        }
+    </script>
+
+
+    <script id="confirm_terms">
+        // Función para mostrar/ocultar el botón de confirmar reserva
+        function toggleConfirmButton() {
+            const acceptTerms = document.getElementById('accept_terms').checked;
+            const confirmButton = document.getElementById('confirmar_reserva');
+
+            if (acceptTerms) {
+                confirmButton.style.display = 'block';
+            } else {
+                confirmButton.style.display = 'none';
+            }
+        }
+
+        // Puedes agregar esta función en el archivo JavaScript que ya tienes, o en un script al final del HTML
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar el estado del botón cuando se carga la página
+            toggleConfirmButton();
+        });
+
+    </script>
+
+    <script id="menu_script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('.menu');
+
+            menuToggle.addEventListener('click', function () {
+                menu.classList.toggle('active');
+            });
+        });
+    </script>
+    <script id="calendario-menu">
+        let ano = new Date().getFullYear();
+        let mes = new Date().getMonth() + 1;
+        let dia = new Date().getDate() + 2;
+        document.getElementById('fecha').min = `${ano}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
+
+        function actualizarCantidad(tipo, cantidad) {
+            let input = document.getElementById(`cantidad-${tipo}`);
+            let valor = parseInt(input.value) + cantidad;
+            if (valor >= 0) {
+                input.value = valor;
+                calcularTotal();
+            }
+        }
+
+        function calcularTotal() {
+            const cantidadAdultos = parseInt(document.getElementById('cantidad-adultos').value);
+            const cantidadNinos = parseInt(document.getElementById('cantidad-ninos').value);
+            const precioAdulto = parseFloat("{{ precio_adulto }}");
+            const precioNino = parseFloat("{{ precio_nino }}");
+            const total = (cantidadAdultos * precioAdulto) + (cantidadNinos * precioNino);
+            document.getElementById('precio-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        document.getElementById('fecha').addEventListener('change', function () {
+            document.getElementById('info-precios').style.display = 'block';
+        });
+
+        let indiceSlide = 1;
+
+        function mostrarSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+
+            if (n > slides.length) {
+                indiceSlide = 1
+            }
+            if (n < 1) {
+                indiceSlide = slides.length
+            }
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[indiceSlide - 1].style.display = "block";
+            dots[indiceSlide - 1].className += " active";
+        }
+
+        function siguienteSlide(n) {
+            mostrarSlides(indiceSlide += n);
+        }
+
+        function slideActual(n) {
+            mostrarSlides(indiceSlide = n);
+        }
+
+        mostrarSlides(indiceSlide);
+
+        function abrirModal() {
+            document.getElementById('reservaModal').style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('reservaModal').style.display = 'none';
+        }
+
+        function validarEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+
+        function verificarFecha() {
+            const fechaTour = document.getElementById('fecha').value;
+            if (!fechaTour) {
+                alert('Por favor, seleccione una fecha para el tour.');
+            } else {
+                abrirModal();
+            }
+        }
+
+        function confirmarReserva() {
+            const nombreTurista = document.getElementById('nombre_turista').value;
+            const rutTurista = document.getElementById('rut_turista').value;
+            const mailTurista = document.getElementById('mail_turista').value;
+            const direccionRecogida = document.getElementById('direccion_recogida').value;
+            const ciudadRecogida = document.getElementById('ciudad_recogida').value;
+            const fechaTour = document.getElementById('fecha').value;
+            const cantidadAdultos = document.getElementById('cantidad-adultos').value;
+            const cantidadNinos = document.getElementById('cantidad-ninos').value;
+            const precioTotal = parseFloat(document.getElementById('precio-total').innerText.replace('$', '').replace(',', ''));
+            const tipoDocumento = document.getElementById('tipo_documento').value;
+
+            if (!validarEmail(mailTurista)) {
+                alert('Por favor, ingrese un correo electrónico válido.');
+                return;
+            }
+
+            if (tipoDocumento === "rut" && !validarRUT(rutTurista)) {
+                alert('Por favor, ingrese un RUT válido.');
+                return;
+            } else if (tipoDocumento === "pasaporte" && !validarPasaporte(rutTurista)) {
+                alert('Por favor, ingrese un Pasaporte válido.');
+                return;
+            }
+
+            if (!ciudadRecogida) {
+                alert('Por favor, seleccione una ciudad de recogida.');
+                return;
+            }
+
+            localStorage.setItem('nombre_tour', document.getElementById('titulo-tour').innerText);
+            localStorage.setItem('fecha_tour', fechaTour);
+            localStorage.setItem('direccion_recogida', direccionRecogida);
+            localStorage.setItem('ciudad_recogida', ciudadRecogida);
+            localStorage.setItem('cantidad_adultos', cantidadAdultos);
+            localStorage.setItem('cantidad_ninos', cantidadNinos);
+            localStorage.setItem('precio_total', precioTotal.toFixed(2));
+            localStorage.setItem('nombre_turista', nombreTurista);
+            localStorage.setItem('rut_turista', rutTurista);
+            localStorage.setItem('mail_turista', mailTurista);
+
+            window.location.href = '/tureserva';
+        }
+
+        function validarRUT(rut) {
+            rut = rut.replace(/\./g, '').replace(/-/g, '');
+
+            if (rut.length < 8 || rut.length > 9) {
+                return false;
+            }
+
+            const cuerpo = rut.slice(0, -1);
+            const dv = rut.slice(-1).toUpperCase();
+
+            let suma = 0;
+            let multiplo = 2;
+
+            for (let i = cuerpo.length - 1; i >= 0; i--) {
+                suma += parseInt(cuerpo.charAt(i)) * multiplo;
+                multiplo = multiplo < 7 ? multiplo + 1 : 2;
+            }
+
+            const dvEsperado = 11 - (suma % 11);
+            const dvCalculado = dvEsperado === 10 ? 'K' : dvEsperado === 11 ? '0' : dvEsperado.toString();
+
+            return dvCalculado === dv;
+        }
+
+        function validarPasaporte(pasaporte) {
+            const re = /^[a-zA-Z0-9]{6,9}$/;
+            return re.test(pasaporte);
+        }
+
+        let itinerarioVisible = false; // Variable de estado para controlar la visibilidad
+
+        const botonItinerario = document.querySelector('.titulo-itinerario');
+        botonItinerario.addEventListener('click', function () {
+            if (itinerarioVisible) {
+                // Ocultar el itinerario si está visible
+                document.getElementById('colapsoItinerario').style.display = 'none';
+            } else {
+                // Mostrar el itinerario si está oculto
+                obtenerItinerario();
+                document.getElementById('colapsoItinerario').style.display = 'block';
+            }
+            // Alternar el estado
+            itinerarioVisible = !itinerarioVisible;
+        });
+
+        function obtenerItinerario() {
+            const tourId = "1";
+            fetch(`/api/itinerario/${tourId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const contenedorItinerario = document.getElementById('colapsoItinerario');
+                    contenedorItinerario.innerHTML = '';
+
+                    data.forEach(item => {
+                        const tarjeta = document.createElement('div');
+                        tarjeta.classList.add('card', 'mb-3', 'tarjeta-itinerario');
+                        tarjeta.innerHTML = `
+                    <div class="hora-actividad">
+                        <div>${item.hora_inicio} - ${item.hora_final}</div>
+                        <div>${item.actividad}</div>
+                    </div>
+                    <div id="detalleItinerario${item.id}" class="detalle-itinerario" style="display: none;">
+                        ${item.detalle_actividad}
+                    </div>
+                `;
+                        tarjeta.addEventListener('click', function () {
+                            const detalles = document.getElementById(`detalleItinerario${item.id}`);
+                            detalles.style.display = detalles.style.display === 'none' ? 'block' : 'none';
+                        });
+                        contenedorItinerario.appendChild(tarjeta);
+                    });
+                })
+                .catch(error => console.error('Error al obtener el itinerario:', error));
+        }
+
+    </script>
+    <script id="itinerario-boton">
+        document.addEventListener('DOMContentLoaded', function () {
+            const botonItinerario = document.getElementById('boton-itinerario');
+
+            // Función para gestionar el estado activo
+            function toggleActiveState() {
+                const isActive = botonItinerario.classList.contains('active');
+
+                // Remueve la clase 'active' de todos los botones (si hay más)
+                document.querySelectorAll('.titulo-itinerario').forEach(btn => btn.classList.remove('active'));
+
+                // Si el botón estaba activo, lo desactiva
+                if (isActive) {
+                    botonItinerario.classList.remove('active');
+                } else {
+                    // Si el botón no estaba activo, lo activa
+                    botonItinerario.classList.add('active');
+                }
+            }
+
+            // Maneja el clic en el botón
+            botonItinerario.addEventListener('click', function () {
+                toggleActiveState();
+            });
+
+            // Maneja la visibilidad del botón
+            const observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.attributeName === 'style') {
+                        if (getComputedStyle(botonItinerario).display === 'none') {
+                            botonItinerario.classList.remove('active');
+                        }
+                    }
+                });
+            });
+
+            observer.observe(botonItinerario, { attributes: true });
+
+            // Opcional: también puedes manejar el estado inicial del botón si es necesario
+            function updateButtonState() {
+                if (getComputedStyle(botonItinerario).display === 'none') {
+                    botonItinerario.classList.remove('active');
+                }
+            }
+
+            updateButtonState(); // Llama a esta función al cargar la página si el botón podría estar oculto inicialmente
+        });
+
+    </script>
+
+    <script id="terms">
+        function toggleTerms() {
+            const termsContent = document.querySelector('.terms-content');
+            termsContent.classList.toggle('hidden');
+        }
+
+    </script>
+</body>
+
+</html>

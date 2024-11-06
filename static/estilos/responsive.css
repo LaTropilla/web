@@ -1,0 +1,76 @@
+:root {
+    --primary-color: #71855f;
+    --background-color: #f9f5f0;
+    --dark-color: #151515;
+}
+
+@media (max-width: 768px) {
+
+    /**NAV***/
+    .menu {
+        display: none;
+        /* Oculta el menú por defecto en móviles */
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        position: absolute;
+        top: 30px;
+        /* Ajusta la posición según el diseño */
+        right: 0;
+        background-color: var(--background-color);
+        color: var(--primary-color);
+        z-index: 1000;
+        /* Asegúrate de que el menú se superponga al contenido */
+    }
+
+    .menu.active {
+        display: flex;
+        /* Muestra el menú cuando esté activo */
+    }
+
+    .menu-toggle {
+        display: block;
+        /* Muestra el botón del menú de hamburguesa en móviles */
+    }
+
+    .navbar {
+        justify-content: space-between;
+    }
+
+    /**Content**/
+
+    .banner {
+        height: auto;
+        padding-bottom: 20px;
+    }
+    .banner p {
+        font-size: 2em;
+    }
+    .banner h2 {
+        font-size: 3em;
+    }
+    .search-bar {
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    .search-row {
+        display: flex;
+        flex-direction: column;
+        height: 150px;
+    }
+
+
+    .banner button {
+        
+        width: 50%;
+    }
+
+
+    .sobre-nosotros .container {
+        width: 80vw;
+    }
+
+
+}
