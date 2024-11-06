@@ -162,4 +162,4 @@ cython_debug/
 #.idea/
 media/
 pindomia/settings.py
-static/
+static/imagenes
