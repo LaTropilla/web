@@ -1,5 +1,8 @@
 from django.db import models
 from datetime import date
+from PIL import Image
+import os
+
 
 class Tour(models.Model):
     DIFICULTAD_OPCIONES = [
@@ -91,20 +94,43 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"{self.nombre_turista} - {self.nombre_tour} ({self.fecha_tour})"
+# Función para que TourDetalle sobreescriba el nombre de archivo para cada imagen.
+# De esta forma, concuerda con el nombre de archivo que se espera en el frontend
+def get_image_upload_path(instance, filename, num):
+    return f'tour_detalle/{instance.tour.id}/{num}.jpg'
 
 class TourDetalle(models.Model):
     tour = models.OneToOneField(Tour, on_delete=models.CASCADE)
     titulo = models.TextField()
     tipo_actividad = models.TextField()
-    imagen_1 = models.ImageField(upload_to='tour_detalle')
-    imagen_2 = models.ImageField(upload_to='tour_detalle')
-    imagen_3 = models.ImageField(upload_to='tour_detalle')
-    imagen_4 = models.ImageField(upload_to='tour_detalle')
-    imagen_5 = models.ImageField(upload_to='tour_detalle')
-    imagen_6 = models.ImageField(upload_to='tour_detalle')
+    # Tuve que poner una función lambda para que el nombre de archivo sea el esperado en el frontend
+    imagen_1 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 1))
+    imagen_2 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 2))
+    imagen_3 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 3))
+    imagen_4 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 4))
+    imagen_5 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 5))
+    imagen_6 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 6))
     descripcion = models.TextField()
     url_mapa = models.CharField(max_length=600)
 
     def __str__(self):
         return f"Detalles {self.tour.nombre}"
-
+    # Se agrega funcionalidad a la función "django.db.models.save" de esta clase para convertir las imágenes a formato JPEG
+    # Además, sobreescribe la imagen si encuentra una ya existente para el tour en cuestión
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        for i, field in enumerate(['imagen_1', 'imagen_2', 'imagen_3', 'imagen_4', 'imagen_5', 'imagen_6'], start=1):
+            image_field = getattr(self, field)
+            if image_field and os.path.exists(image_field.path):
+                img = Image.open(image_field.path)
+                if img.format != 'JPEG':
+                    img = img.convert('RGB')
+                    new_filename = f'{i}.jpg'
+                    new_path = os.path.join(os.path.dirname(image_field.path), new_filename)
+                    if os.path.exists(new_path):
+                        os.remove(new_path)
+                    img.save(new_path, 'JPEG')
+                    os.remove(image_field.path)
+                    setattr(self, field, new_filename)
+                    image_field.name = new_filename
+        super().save(*args, **kwargs)

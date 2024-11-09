@@ -84,7 +84,9 @@ def tour_detalle_pagina(request, tour_id):
         "ubicacion": tour.ubicacion,
         "precio_adulto": tour.precio,
         "precio_nino": tour.precio_nino,
-        "tour_id": tour.id
+        "tour_id": tour.id,
+        "range": range(1, 7),
+        "ruta_carrusel": "/media/tour_detalle/" + str(tour_id) + "/",
     }
     return render(request, 'tourdetalle.html', context)
 

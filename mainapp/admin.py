@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django import forms
 from django.forms import ModelForm, TimeInput
 from .models import Tour, Reserva, TourDetalle, Itinerario
