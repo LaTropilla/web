@@ -249,20 +249,82 @@
 
 
     <script>
-        function actualizarPlaceholder() {
-            const docType = document.getElementById("tipo_documento").value;
-            const docNumberInput = document.getElementById("rut_turista");
-            if (docType === "rut") {
-                docNumberInput.placeholder = "Ingrese su Rut chileno";
-            } else if (docType === "pasaporte") {
-                docNumberInput.placeholder = "Ingrese su Pasaporte";
-            }
+        function formatRut(rut) {
+        let valor = rut.replace(/\./g, '').replace(/-/g, '');
+        valor = valor.replace(/[^0-9kK]/g, '');
+        if (valor.length === 0) return '';
+        let dv = valor.slice(-1);
+        let rutNumeros = valor.slice(0, -1);
+        let rutFormateado = '';
+        for (let i = rutNumeros.length; i > 0; i -= 3) {
+            const inicio = Math.max(0, i - 3);
+            rutFormateado = rutNumeros.slice(inicio, i) + 
+                           (rutFormateado ? '.' + rutFormateado : '');
         }
+
+        return rutFormateado + '-' + dv;
+    }
+
+    function formatPasaporte(pasaporte) {
+        let valor = pasaporte.replace(/\s/g, '').toUpperCase();
+        
+        valor = valor.replace(/[^A-Z0-9]/g, '');
+        
+        let pasaporteFormateado = '';
+        for (let i = 0; i < valor.length; i++) {
+            if (i > 0 && i % 3 === 0) {
+                pasaporteFormateado += ' ';
+            }
+            pasaporteFormateado += valor[i];
+        }
+        
+        return pasaporteFormateado;
+    }
+
+    function handleDocumentoInput(event) {
+        const input = event.target;
+        const tipoDoc = document.getElementById('tipo_documento').value;
+        
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const length = input.value.length;
+        
+        if (tipoDoc === 'rut') {
+            input.value = formatRut(input.value);
+        } else {
+            input.value = formatPasaporte(input.value);
+        }
+        
+        const newLength = input.value.length;
+        const position = Math.max(0, start + (newLength - length));
+        input.setSelectionRange(position, position);
+    }
+
+    function actualizarPlaceholder() {
+        const docType = document.getElementById("tipo_documento").value;
+        const docNumberInput = document.getElementById("rut_turista");
+        
+        docNumberInput.value = '';
+        
+        if (docType === "rut") {
+            docNumberInput.placeholder = "Ingrese su Rut chileno";
+            docNumberInput.maxLength = 12; 
+        } else if (docType === "pasaporte") {
+            docNumberInput.placeholder = "Ingrese su Pasaporte";
+            docNumberInput.maxLength = 15; 
+        }
+        
+        docNumberInput.removeEventListener('input', handleDocumentoInput);
+        docNumberInput.addEventListener('input', handleDocumentoInput);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        actualizarPlaceholder();
+    });
     </script>
 
 
     <script id="confirm_terms">
-        // Función para mostrar/ocultar el botón de confirmar reserva
         function toggleConfirmButton() {
             const acceptTerms = document.getElementById('accept_terms').checked;
             const confirmButton = document.getElementById('confirmar_reserva');
@@ -274,9 +336,7 @@
             }
         }
 
-        // Puedes agregar esta función en el archivo JavaScript que ya tienes, o en un script al final del HTML
         document.addEventListener('DOMContentLoaded', function () {
-            // Inicializar el estado del botón cuando se carga la página
             toggleConfirmButton();
         });
 
