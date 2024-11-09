@@ -163,3 +163,7 @@ cython_debug/
 media/
 pindomia/settings.py
 static/imagenes
+staticfiles
+static/jazzmin
+static/vendor
+static/admin
