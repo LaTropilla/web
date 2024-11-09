@@ -79,15 +79,30 @@
             <p class="divider">------------------------------------------------</p>
             <div class="slideshow">
                 <div class="slideshow-container" id="contenedor-slideshow">
-                    <!-- Este ciclo obtendrá 6 imágenes desde la carpeta "static/imagenes/tourdetalle/[tour_id]/[del 1 al 6.jpg]" -->
-                    {% for i in range(1, 7) %}
-                        {% with image_path="imagenes/tourdetalle/" | add:tour_id | add:"/" | add:i | add:".jpg" %}
                     <div class="mySlides fade">
-                        <div class="numbertext">{i} / 6</div>
-                        <img src="{% static image_path %}" style="width:100%">
+                        <div class="numbertext">1 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt1.jpg' %}" style="width:100%">
                     </div>
-                        {% endwith %}
-                    {% endfor %}
+                    <div class="mySlides fade">
+                        <div class="numbertext">2 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt2.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">3 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt3.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">4 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt4.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">5 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt5.jpg' %}" style="width:100%">
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">6 / 6</div>
+                        <img src="{% static 'imagenes/tourdetalle/bt6.jpg' %}" style="width:100%">
+                    </div>
                 </div>
                 <br>
                 <div style="text-align:center" id="contenedor-dots">
