@@ -1,37 +1,68 @@
-body {
-    font-family: Arial, sans-serif;
-    width: 90vw;
-    color: #333;
-    margin: 5vw;
-    padding: 0;
-    background-color: #f4f4f4;
+:root {
+    --primary-color: #71855f;
+    --background-color: #f9f5f0;
+    --dark-color: #151515;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    background-color: var(--background-color);
+}
+
+/* Estilos para la barra de navegación */
+nav {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto; /* Centra la barra de navegación */
+    padding: 20px 0; /* Ajusta el padding para un espaciado adecuado */
+    background-color: var(--primary-color); /* Color de fondo de la barra */
+    color: white;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
+/* Centrar el título principal */
 h1 {
-    color: #71855f;
+    color: var(--primary-color);
     text-align: center;
     margin-top: 20px;
+    width: 80%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Centrar contenedores principales */
+.datos-container,
+#map-container,
+#editar-direccion {
+    width: 80%;
+    max-width: 1200px;
+    margin: 20px auto; /* Centrados automáticamente */
 }
 
 .datos-container {
     display: flex;
     justify-content: space-between;
-    margin: 20px auto;
-    width: 80%;
 }
 
 .datos-columna {
     flex: 1;
+    text-align: left;
     padding: 0 20px;
     box-sizing: border-box;
 }
 
+.datos-columna h2 {
+    text-align: left;
+}
+
 h2 {
-    color: #71855f;
+    color: var(--primary-color);
+    text-align: center;
     margin: 20px 0;
 }
 
@@ -40,11 +71,7 @@ p {
     margin: 10px 0;
 }
 
-#map-container {
-    width: 80%;
-    margin: 20px auto;
-}
-
+/* Estilos para el mapa */
 #map {
     height: 350px;
     width: 100%;
@@ -52,6 +79,7 @@ p {
     border-radius: 8px;
 }
 
+/* Centrar el formulario de edición de dirección */
 #editar-direccion-form {
     background-color: #fff;
     padding: 15px;
@@ -70,16 +98,18 @@ input[type="text"], select {
     font-size: 16px;
 }
 
+/* Centrar botones */
 button {
-    background-color: #71855f;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: 10px 20px;
-    margin: 5px;
+    margin: 5px auto; /* Centrarlos automáticamente */
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
     width: 250px;
+    display: block; /* Para que el margen auto funcione */
     transition: background-color 0.3s;
 }
 
@@ -87,17 +117,11 @@ button:hover {
     background-color: #235c49;
 }
 
-#editar-direccion {
-    display: block;
-    width: 80%;
-    margin: 20px auto;
-}
-
+/* Pie de página */
 .footer {
     text-align: center;
     padding: 20px;
-    background-color: #71855f;
+    background-color: var(--primary-color);
     color: white;
     margin-top: 20px;
 }
-

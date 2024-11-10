@@ -148,76 +148,77 @@
     </div>
 
     <!-- Modal de reserva -->
-    <div id="reservaModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <div class="modal-body">
-                <h2>Confirmar reserva y pagar</h2>
-                <input type="text" id="nombre_turista" placeholder="Nombre" required>
-                <!-- Nuevo selector de tipo de documento -->
-                <label for="tipo_documento">Elija documento de identidad:</label>
-                <select id="tipo_documento" onchange="actualizarPlaceholder()">
-                    <option value="rut">Rut chileno</option>
-                    <option value="pasaporte">Pasaporte</option>
-                </select>
+<div id="reservaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <div class="modal-body">
+            <h2>Confirmar reserva y pagar</h2>
+            <input type="text" id="nombre_turista" placeholder="Nombre" required>
+            
+            <!-- Nuevo selector de tipo de documento -->
+            <label for="tipo_documento">Elija documento de identidad:</label>
+            <select id="tipo_documento" onchange="actualizarPlaceholder()">
+                <option value="rut">Rut chileno</option>
+                <option value="pasaporte">Pasaporte</option>
+            </select>
 
-                <!-- Ajuste del campo de documento -->
-                <input type="text" id="rut_turista" placeholder="Ingrese su Rut chileno" required>
-                
-                <input type="email" id="mail_turista" placeholder="Email" required>
-                <input type="text" id="direccion_recogida" placeholder="Dirección de recogida" required>
-                <select id="ciudad_recogida" required>
-                    <option value="">Seleccione Ciudad</option>
-                    <option value="Puerto Natales">Puerto Natales</option>
-                    <option value="Punta Arenas">Punta Arenas</option>
-                </select>
+            <!-- Ajuste del campo de documento -->
+            <input type="text" id="rut_turista" placeholder="Ingrese su Rut chileno" required>
+            <input type="email" id="mail_turista" placeholder="Email" required>
+            <input type="text" id="direccion_recogida" placeholder="Dirección de recogida" required>
+            <select id="ciudad_recogida" required>
+                <option value="">Seleccione Ciudad</option>
+                <option value="Puerto Natales">Puerto Natales</option>
+                <option value="Punta Arenas">Punta Arenas</option>
+            </select>
 
-                <div class="terms">
-                    <button class="terms-toggle" onclick="toggleTerms()">Términos y Condiciones</button>
-                    <div class="terms-content hidden">
-                        <p>Por favor, revisa detenidamente estos Términos y Condiciones antes de utilizar los servicios
-                            ofrecidos en nuestro sitio web. Al acceder y utilizar los servicios de Patagonia Indomia,
-                            aceptas haber leído, comprendido y aceptado estos términos. Si no estás de acuerdo, por
-                            favor,
-                            no utilices nuestros servicios.</p>
-                        <ul>
-                            <li><strong>Contrato de Tour:</strong> Patagonia Indomia es una agencia de turismo chilena
-                                con
-                                domicilio en Punta Arenas, Chile. Actuamos como operador minorista de tours, gestionando
-                                y
-                                organizando paquetes turísticos que pueden incluir transporte y alojamiento, ya sea
-                                directamente o a través de terceros proveedores.</li>
-                            <li><strong>Reserva y Pago:</strong> Debe ser pagado el 100% del precio total antes del
-                                inicio
-                                del tour. El paquete solo se considerará reservado cuando el 100% del pago haya sido
-                                realizado.</li>
-                            <li><strong>Documentación Requerida:</strong> Documentos necesarios para pasajeros
-                                nacionales e
-                                internacionales. Ver detalles específicos.</li>
-                            <li><strong>Retiro por Parte del Cliente y Cambios a la Reserva:</strong> Políticas de
-                                cancelación y cambios en la reserva.</li>
-                            <li><strong>Limitación de Responsabilidad:</strong> Exención de responsabilidad de Patagonia
-                                Indomia por ciertos incidentes.</li>
-                            <li><strong>Seguro:</strong> Recomendación de contratar un seguro de viaje y la exención de
-                                responsabilidad por condiciones médicas no declaradas.</li>
-                            <li><strong>Obligación a Colaborar:</strong> Comportamiento y colaboración durante el tour.
-                            </li>
-                            <li><strong>Ineficacia de Regulaciones Individuales:</strong> Validez de las cláusulas del
-                                acuerdo.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="terms-agreement">
-                    <input type="checkbox" id="accept_terms" onchange="toggleConfirmButton()">
-                    <label for="accept_terms">Acepto los Términos y Condiciones</label>
-                </div>
-
-                <button id="confirmar_reserva" onclick="confirmarReserva()" style="display: none;">Confirmar reserva y
-                    pagar</button>
+            <!-- Términos y Condiciones siempre visibles -->
+            <div class="terms-content">
+                <p>Por favor, revisa detenidamente estos Términos y Condiciones antes de utilizar los servicios
+                    ofrecidos en nuestro sitio web. Al acceder y utilizar los servicios de Patagonia Indomia,
+                    aceptas haber leído, comprendido y aceptado estos términos. Si no estás de acuerdo, por
+                    favor, no utilices nuestros servicios.
+                </p>
+                <ul>
+                    <li><strong>Contrato de Tour:</strong> Patagonia Indomia es una agencia de turismo chilena
+                        con domicilio en Punta Arenas, Chile. Actuamos como operador minorista de tours, gestionando
+                        y organizando paquetes turísticos que pueden incluir transporte y alojamiento, ya sea
+                        directamente o a través de terceros proveedores.
+                    </li>
+                    <li><strong>Reserva y Pago:</strong> Debe ser pagado el 100% del precio total antes del
+                        inicio del tour. El paquete solo se considerará reservado cuando el 100% del pago haya sido
+                        realizado.
+                    </li>
+                    <li><strong>Documentación Requerida:</strong> Documentos necesarios para pasajeros
+                        nacionales e internacionales. Ver detalles específicos.
+                    </li>
+                    <li><strong>Retiro por Parte del Cliente y Cambios a la Reserva:</strong> Políticas de
+                        cancelación y cambios en la reserva.
+                    </li>
+                    <li><strong>Limitación de Responsabilidad:</strong> Exención de responsabilidad de Patagonia
+                        Indomia por ciertos incidentes.
+                    </li>
+                    <li><strong>Seguro:</strong> Recomendación de contratar un seguro de viaje y la exención de
+                        responsabilidad por condiciones médicas no declaradas.
+                    </li>
+                    <li><strong>Obligación a Colaborar:</strong> Comportamiento y colaboración durante el tour.
+                    </li>
+                    <li><strong>Ineficacia de Regulaciones Individuales:</strong> Validez de las cláusulas del
+                        acuerdo.
+                    </li>
+                </ul>
             </div>
+
+            <div class="terms-agreement">
+                <input type="checkbox" id="accept_terms" onchange="toggleConfirmButton()">
+                <label for="accept_terms">Acepto los Términos y Condiciones</label>
+            </div>
+
+            <button id="confirmar_reserva" onclick="confirmarReserva()" style="display: none;">Confirmar reserva y pagar</button>
         </div>
     </div>
+</div>
+
     
     <footer class="mifooter">
         <div class="footer-content">
