@@ -3,7 +3,6 @@ from datetime import date
 from PIL import Image
 import os
 
-
 class Tour(models.Model):
     DIFICULTAD_OPCIONES = [
         ('Baja', 'Baja'),
@@ -50,9 +49,8 @@ class Tour(models.Model):
         ('Parque Nacional Torres del Paine, Punta Arenas, Puerto Natales', 'Parque Nacional Torres del Paine, Punta Arenas, Puerto Natales'),   
     ]
 
-
     nombre = models.CharField(max_length=255)
-    tiempo = models.CharField(max_length=255, choices= TIEMPO_OPCIONES)
+    tiempo = models.CharField(max_length=255, choices=TIEMPO_OPCIONES)
     ubicacion = models.CharField(max_length=255, choices=UBICACION_OPCIONES)
     precio = models.DecimalField(max_digits=10, decimal_places=0)
     precio_nino = models.DecimalField(max_digits=10, decimal_places=0)
@@ -60,13 +58,13 @@ class Tour(models.Model):
     jornada = models.CharField(max_length=255, choices=JORNADA_OPCIONES)
     imagen = models.ImageField(upload_to='tours/images/')
     tour_desde = models.CharField(max_length=255, choices=DESDE_OPCIONES)
+
     class Meta:
         verbose_name = "Tour"
         verbose_name_plural = "Tours"
 
     def __str__(self):
         return self.nombre
-
 
 class Itinerario(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
@@ -79,6 +77,13 @@ class Itinerario(models.Model):
         return f'{self.actividad} ({self.hora_inicio} - {self.hora_final})'
 
 class Reserva(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('aprobado', 'Aprobado'),
+        ('rechazado', 'Rechazado'),
+        ('cancelado', 'Cancelado')
+    ]
+
     id = models.AutoField(primary_key=True)
     nombre_turista = models.CharField(max_length=255)
     rut_turista = models.CharField(max_length=12)
@@ -91,11 +96,13 @@ class Reserva(models.Model):
     cantidad_ninos = models.IntegerField()
     nombre_tour = models.CharField(max_length=255, default="tournombre")
     precio_total = models.DecimalField(max_digits=10, decimal_places=0)
+    estado_pago = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    payment_id = models.CharField(max_length=255, null=True, blank=True)
+    preference_id = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.nombre_turista} - {self.nombre_tour} ({self.fecha_tour})"
-# Función para que TourDetalle sobreescriba el nombre de archivo para cada imagen.
-# De esta forma, concuerda con el nombre de archivo que se espera en el frontend
+
 def get_image_upload_path(instance, filename, num):
     return f'tour_detalle/{instance.tour.id}/{num}.jpg'
 
@@ -103,7 +110,6 @@ class TourDetalle(models.Model):
     tour = models.OneToOneField(Tour, on_delete=models.CASCADE)
     titulo = models.TextField()
     tipo_actividad = models.TextField()
-    # Tuve que poner una función lambda para que el nombre de archivo sea el esperado en el frontend
     imagen_1 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 1))
     imagen_2 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 2))
     imagen_3 = models.ImageField(upload_to=lambda instance, filename: get_image_upload_path(instance, filename, 3))
@@ -115,8 +121,7 @@ class TourDetalle(models.Model):
 
     def __str__(self):
         return f"Detalles {self.tour.nombre}"
-    # Se agrega funcionalidad a la función "django.db.models.save" de esta clase para convertir las imágenes a formato JPEG
-    # Además, sobreescribe la imagen si encuentra una ya existente para el tour en cuestión
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         for i, field in enumerate(['imagen_1', 'imagen_2', 'imagen_3', 'imagen_4', 'imagen_5', 'imagen_6'], start=1):

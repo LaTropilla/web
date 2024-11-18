@@ -6,7 +6,8 @@ from .models import Tour, Reserva, TourDetalle, Itinerario
 class TourDetalleForm(forms.ModelForm):
     class Meta:
         model = TourDetalle
-        fields = ['titulo', 'tipo_actividad', 'imagen_1', 'imagen_2', 'imagen_3', 'imagen_4', 'imagen_5', 'imagen_6', 'descripcion', 'url_mapa']
+        fields = ['titulo', 'tipo_actividad', 'imagen_1', 'imagen_2', 'imagen_3', 
+                 'imagen_4', 'imagen_5', 'imagen_6', 'descripcion', 'url_mapa']
 
 class TourDetalleInline(admin.StackedInline):
     model = TourDetalle
@@ -25,6 +26,7 @@ class ItinerarioForm(ModelForm):
 
 class ItinerarioInline(admin.TabularInline):
     model = Itinerario
+    form = ItinerarioForm
     extra = 1  # Cuántos itinerarios se mostrarán para agregar
 
 @admin.register(Tour)
@@ -38,13 +40,51 @@ class TourAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
         if not hasattr(obj, 'tourdetalle'):
             TourDetalle.objects.create(tour=obj)
-
         itinerarios = Itinerario.objects.filter(tour=obj)
-
 
 @admin.register(Reserva)
 class ReservaAdmin(admin.ModelAdmin):
-    list_display = ('fecha_tour', 'nombre_tour', 'direccion_recogida', 'ciudad_recogida', 'cantidad_adultos', 'cantidad_ninos', 'precio_total', 'nombre_turista', 'rut_turista', 'email_turista', 'fecha_reserva')
-    list_filter = ('fecha_tour', 'ciudad_recogida')
-    search_fields = ('nombre_turista', 'rut_turista', 'email_turista', 'nombre_tour')
-
+    list_display = (
+        'nombre_turista',
+        'rut_turista',
+        'email_turista',
+        'fecha_tour',
+        'nombre_tour', 
+        'direccion_recogida',
+        'ciudad_recogida',
+        'cantidad_adultos',
+        'cantidad_ninos',
+        'precio_total',
+        'fecha_reserva',
+        'estado_pago'
+    )
+    
+    list_filter = (
+        'fecha_tour',
+        'ciudad_recogida',
+        'estado_pago'
+    )
+    
+    search_fields = (
+        'nombre_turista',
+        'rut_turista',
+        'email_turista',
+        'nombre_tour'
+    )
+    
+    fields = (
+        'nombre_turista',
+        'rut_turista',
+        'email_turista',
+        'fecha_tour',
+        'nombre_tour',
+        'direccion_recogida',
+        'ciudad_recogida',
+        'cantidad_adultos',
+        'cantidad_ninos',
+        'precio_total',
+        'fecha_reserva',
+        'estado_pago',
+        'payment_id',
+        'preference_id'
+    )

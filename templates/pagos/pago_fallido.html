@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Fallido</title>
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/style-reserva.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="/static/imagenes/index/logoverde.png" alt="Logo de la empresa">
+                </div>                
+                <ul class="menu">
+                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                    <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                    <li><a href="{% url 'trasladoshtml' %}">Traslados</a></li>
+                    <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="mensaje-container">
+        <div class="mensaje-error">
+            <i class="fas fa-times-circle"></i>
+            <h1>Pago No Completado</h1>
+            <p>Lo sentimos, ha ocurrido un problema al procesar tu pago.</p>
+            <p>Por favor, intenta realizar el pago nuevamente.</p>
+            
+            {% if reserva %}
+            <div class="detalles-reserva">
+                <p><strong>Tour:</strong> {{ reserva.nombre_tour }}</p>
+                <p><strong>Fecha del Tour:</strong> {{ reserva.fecha_tour }}</p>
+                <p><strong>Total a Pagar:</strong> ${{ reserva.precio_total }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="opciones-botones">
+                <a href="javascript:history.back()" class="btn-reintentar">Reintentar Pago</a>
+                <a href="{% url 'index' %}" class="btn-volver">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .mensaje-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+
+        .mensaje-error {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .fa-times-circle {
+            color: #dc3545;
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #dc3545;
+            margin-bottom: 20px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .detalles-reserva {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #fff5f5;
+            border-radius: 5px;
+            border: 1px solid #ffebeb;
+        }
+
+        .detalles-reserva p {
+            color: #333;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .opciones-botones {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-reintentar, .btn-volver {
+            display: inline-block;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-reintentar {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-reintentar:hover {
+            background-color: #c82333;
+        }
+
+        .btn-volver {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-volver:hover {
+            background-color: #5a6268;
+        }
+
+        strong {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .mensaje-error {
+                padding: 20px;
+            }
+
+            .fa-times-circle {
+                font-size: 60px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .opciones-botones {
+                flex-direction: column;
+            }
+
+            .btn-reintentar, .btn-volver {
+                width: 100%;
+                margin: 5px 0;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reintentarBtn = document.querySelector('.btn-reintentar');
+            reintentarBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.history.back();
+            });
+        });
+    </script>
+</body>
+</html>

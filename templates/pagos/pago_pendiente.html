@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Pendiente</title>
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/style-reserva.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="/static/imagenes/index/logoverde.png" alt="Logo de la empresa">
+                </div>                
+                <ul class="menu">
+                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                    <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                    <li><a href="{% url 'trasladoshtml' %}">Traslados</a></li>
+                    <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="mensaje-container">
+        <div class="mensaje-pendiente">
+            <i class="fas fa-clock"></i>
+            <h1>Pago en Proceso</h1>
+            <p>Tu pago está siendo procesado.</p>
+            <p>Te enviaremos un correo electrónico cuando confirmemos el pago.</p>
+
+            {% if reserva %}
+            <div class="detalles-reserva">
+                <p><strong>Tour:</strong> {{ reserva.nombre_tour }}</p>
+                <p><strong>Fecha del Tour:</strong> {{ reserva.fecha_tour }}</p>
+                <p><strong>Total a Pagar:</strong> ${{ reserva.precio_total }}</p>
+                <p><strong>Participantes:</strong> {{ reserva.cantidad_adultos }} adultos{% if reserva.cantidad_ninos > 0 %} y {{ reserva.cantidad_ninos }} niños{% endif %}</p>
+            </div>
+            {% endif %}
+
+            <div class="detalles-pago">
+                <p><strong>Estado:</strong> Pendiente de confirmación</p>
+                <p>Por favor, espera mientras procesamos tu pago.</p>
+                {% if reserva.payment_id %}
+                <p><strong>ID de Transacción:</strong> {{ reserva.payment_id }}</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'index' %}" class="btn-volver">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <style>
+        .mensaje-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+
+        .mensaje-pendiente {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .fa-clock {
+            color: #ffc107;
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #ffc107;
+            margin-bottom: 20px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .detalles-pago, .detalles-reserva {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #fff8e1;
+            border-radius: 5px;
+            border: 1px solid #ffe082;
+        }
+
+        .detalles-pago p, .detalles-reserva p {
+            color: #333;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .detalles-reserva {
+            background-color: #fffde7;
+            border-color: #fff9c4;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #ffc107;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-volver:hover {
+            background-color: #e0a800;
+        }
+
+        strong {
+            color: #d6a100;
+        }
+
+        @media (max-width: 768px) {
+            .mensaje-pendiente {
+                padding: 20px;
+            }
+
+            .fa-clock {
+                font-size: 60px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .btn-volver {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
+</html>

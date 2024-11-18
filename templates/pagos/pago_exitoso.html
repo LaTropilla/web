@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Exitoso</title>
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'estilos/style-reserva.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="/static/imagenes/index/logoverde.png" alt="Logo de la empresa">
+                </div>                
+                <ul class="menu">
+                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                    <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                    <li><a href="{% url 'trasladoshtml' %}">Traslados</a></li>
+                    <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="mensaje-container">
+        <div class="mensaje-exito">
+            <i class="fas fa-check-circle"></i>
+            <h1>¡Pago Exitoso!</h1>
+            <p>Tu reserva ha sido confirmada y el pago se ha procesado correctamente.</p>
+            <p>Hemos enviado un correo electrónico con todos los detalles de tu reserva.</p>
+            <p>¡Prepárate para vivir una experiencia inolvidable!</p>
+
+            <div class="detalles-pago">
+                <p><strong>ID de Pago:</strong> {{ payment_id }}</p>
+                <p><strong>Estado:</strong> Aprobado</p>
+                {% if reserva %}
+                <p><strong>Tour:</strong> {{ reserva.nombre_tour }}</p>
+                <p><strong>Fecha del Tour:</strong> {{ reserva.fecha_tour }}</p>
+                <p><strong>Total Pagado:</strong> ${{ reserva.precio_total }}</p>
+                {% endif %}
+            </div>
+
+            <div class="detalles-reserva">
+                {% if reserva %}
+                <p><strong>Punto de Encuentro:</strong></p>
+                <p>{{ reserva.direccion_recogida }}, {{ reserva.ciudad_recogida }}</p>
+                <p><strong>Participantes:</strong></p>
+                <p>{{ reserva.cantidad_adultos }} adultos{% if reserva.cantidad_ninos > 0 %} y {{ reserva.cantidad_ninos }} niños{% endif %}</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'index' %}" class="btn-volver">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <style>
+        .mensaje-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+
+        .mensaje-exito {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .fa-check-circle {
+            color: #4CAF50;
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .detalles-pago, .detalles-reserva {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .detalles-pago p, .detalles-reserva p {
+            color: #333;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .detalles-reserva {
+            background-color: #f0f8f0;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-volver:hover {
+            background-color: #45a049;
+        }
+
+        strong {
+            color: #2e7d32;
+        }
+
+        @media (max-width: 768px) {
+            .mensaje-exito {
+                padding: 20px;
+            }
+
+            .fa-check-circle {
+                font-size: 60px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Limpiar los datos de la reserva del localStorage ya que el pago fue exitoso
+            localStorage.removeItem('reservaData');
+        });
+    </script>
+</body>
+</html>
