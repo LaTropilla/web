@@ -167,3 +167,4 @@ staticfiles
 static/jazzmin
 static/vendor
 static/admin
+mainapp/migrations
