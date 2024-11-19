@@ -3,13 +3,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # Información de configuración
-smtp_server = 'mail.profeclauvidelas.cl'
+smtp_server = 'mail.turismolatropilla.cl'
 smtp_port = 465  # Puerto para SSL
-smtp_user = 'reservas@profeclauvidelas.cl'
-smtp_password = 'Indomia123!'
+smtp_user = 'noreply@turismolatropilla.cl'
+smtp_password = 'Tr0p1ll41!'
 
 # Configuración del correo
-from_address = 'reservas@profeclauvidelas.cl'
+from_address = 'noreply@turismolatropilla.cl'
 to_address = 'elmatiiix22@gmail.com'  # Cambia esto a la dirección del destinatario
 subject = 'Correo de Prueba'
 body = 'Este es el cuerpo del correo de prueba.'

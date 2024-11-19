@@ -79,30 +79,13 @@
             <p class="divider">------------------------------------------------</p>
             <div class="slideshow">
                 <div class="slideshow-container" id="contenedor-slideshow">
+                    <!-- Este ciclo obtendrá 6 imágenes desde la carpeta "static/imagenes/tourdetalle/[tour_id]/[i.jpg]" -->
+                    {% for i in range %}
                     <div class="mySlides fade">
-                        <div class="numbertext">1 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt1.jpg' %}" style="width:100%">
+                        <div class="numbertext">{{ i }} / 6</div>
+                        <img src="{{ ruta_carrusel }}{{ i }}.jpg" style="width:100%">
                     </div>
-                    <div class="mySlides fade">
-                        <div class="numbertext">2 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt2.jpg' %}" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <div class="numbertext">3 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt3.jpg' %}" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <div class="numbertext">4 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt4.jpg' %}" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <div class="numbertext">5 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt5.jpg' %}" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <div class="numbertext">6 / 6</div>
-                        <img src="{% static 'imagenes/tourdetalle/bt6.jpg' %}" style="width:100%">
-                    </div>
+                    {% endfor %}
                 </div>
                 <br>
                 <div style="text-align:center" id="contenedor-dots">
@@ -165,76 +148,77 @@
     </div>
 
     <!-- Modal de reserva -->
-    <div id="reservaModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <div class="modal-body">
-                <h2>Confirmar reserva y pagar</h2>
-                <input type="text" id="nombre_turista" placeholder="Nombre" required>
-                <!-- Nuevo selector de tipo de documento -->
-                <label for="tipo_documento">Elija documento de identidad:</label>
-                <select id="tipo_documento" onchange="actualizarPlaceholder()">
-                    <option value="rut">Rut chileno</option>
-                    <option value="pasaporte">Pasaporte</option>
-                </select>
+<div id="reservaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <div class="modal-body">
+            <h2>Confirmar reserva y pagar</h2>
+            <input type="text" id="nombre_turista" placeholder="Nombre" required>
+            
+            <!-- Nuevo selector de tipo de documento -->
+            <label for="tipo_documento">Elija documento de identidad:</label>
+            <select id="tipo_documento" onchange="actualizarPlaceholder()">
+                <option value="rut">Rut chileno</option>
+                <option value="pasaporte">Pasaporte</option>
+            </select>
 
-                <!-- Ajuste del campo de documento -->
-                <input type="text" id="rut_turista" placeholder="Ingrese su Rut chileno" required>
-                
-                <input type="email" id="mail_turista" placeholder="Email" required>
-                <input type="text" id="direccion_recogida" placeholder="Dirección de recogida" required>
-                <select id="ciudad_recogida" required>
-                    <option value="">Seleccione Ciudad</option>
-                    <option value="Puerto Natales">Puerto Natales</option>
-                    <option value="Punta Arenas">Punta Arenas</option>
-                </select>
+            <!-- Ajuste del campo de documento -->
+            <input type="text" id="rut_turista" placeholder="Ingrese su Rut chileno" required>
+            <input type="email" id="mail_turista" placeholder="Email" required>
+            <input type="text" id="direccion_recogida" placeholder="Dirección de recogida" required>
+            <select id="ciudad_recogida" required>
+                <option value="">Seleccione Ciudad</option>
+                <option value="Puerto Natales">Puerto Natales</option>
+                <option value="Punta Arenas">Punta Arenas</option>
+            </select>
 
-                <div class="terms">
-                    <button class="terms-toggle" onclick="toggleTerms()">Términos y Condiciones</button>
-                    <div class="terms-content hidden">
-                        <p>Por favor, revisa detenidamente estos Términos y Condiciones antes de utilizar los servicios
-                            ofrecidos en nuestro sitio web. Al acceder y utilizar los servicios de Patagonia Indomia,
-                            aceptas haber leído, comprendido y aceptado estos términos. Si no estás de acuerdo, por
-                            favor,
-                            no utilices nuestros servicios.</p>
-                        <ul>
-                            <li><strong>Contrato de Tour:</strong> Patagonia Indomia es una agencia de turismo chilena
-                                con
-                                domicilio en Punta Arenas, Chile. Actuamos como operador minorista de tours, gestionando
-                                y
-                                organizando paquetes turísticos que pueden incluir transporte y alojamiento, ya sea
-                                directamente o a través de terceros proveedores.</li>
-                            <li><strong>Reserva y Pago:</strong> Debe ser pagado el 100% del precio total antes del
-                                inicio
-                                del tour. El paquete solo se considerará reservado cuando el 100% del pago haya sido
-                                realizado.</li>
-                            <li><strong>Documentación Requerida:</strong> Documentos necesarios para pasajeros
-                                nacionales e
-                                internacionales. Ver detalles específicos.</li>
-                            <li><strong>Retiro por Parte del Cliente y Cambios a la Reserva:</strong> Políticas de
-                                cancelación y cambios en la reserva.</li>
-                            <li><strong>Limitación de Responsabilidad:</strong> Exención de responsabilidad de Patagonia
-                                Indomia por ciertos incidentes.</li>
-                            <li><strong>Seguro:</strong> Recomendación de contratar un seguro de viaje y la exención de
-                                responsabilidad por condiciones médicas no declaradas.</li>
-                            <li><strong>Obligación a Colaborar:</strong> Comportamiento y colaboración durante el tour.
-                            </li>
-                            <li><strong>Ineficacia de Regulaciones Individuales:</strong> Validez de las cláusulas del
-                                acuerdo.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="terms-agreement">
-                    <input type="checkbox" id="accept_terms" onchange="toggleConfirmButton()">
-                    <label for="accept_terms">Acepto los Términos y Condiciones</label>
-                </div>
-
-                <button id="confirmar_reserva" onclick="confirmarReserva()" style="display: none;">Confirmar reserva y
-                    pagar</button>
+            <!-- Términos y Condiciones siempre visibles -->
+            <div class="terms-content">
+                <p>Por favor, revisa detenidamente estos Términos y Condiciones antes de utilizar los servicios
+                    ofrecidos en nuestro sitio web. Al acceder y utilizar los servicios de Patagonia Indomia,
+                    aceptas haber leído, comprendido y aceptado estos términos. Si no estás de acuerdo, por
+                    favor, no utilices nuestros servicios.
+                </p>
+                <ul>
+                    <li><strong>Contrato de Tour:</strong> Patagonia Indomia es una agencia de turismo chilena
+                        con domicilio en Punta Arenas, Chile. Actuamos como operador minorista de tours, gestionando
+                        y organizando paquetes turísticos que pueden incluir transporte y alojamiento, ya sea
+                        directamente o a través de terceros proveedores.
+                    </li>
+                    <li><strong>Reserva y Pago:</strong> Debe ser pagado el 100% del precio total antes del
+                        inicio del tour. El paquete solo se considerará reservado cuando el 100% del pago haya sido
+                        realizado.
+                    </li>
+                    <li><strong>Documentación Requerida:</strong> Documentos necesarios para pasajeros
+                        nacionales e internacionales. Ver detalles específicos.
+                    </li>
+                    <li><strong>Retiro por Parte del Cliente y Cambios a la Reserva:</strong> Políticas de
+                        cancelación y cambios en la reserva.
+                    </li>
+                    <li><strong>Limitación de Responsabilidad:</strong> Exención de responsabilidad de Patagonia
+                        Indomia por ciertos incidentes.
+                    </li>
+                    <li><strong>Seguro:</strong> Recomendación de contratar un seguro de viaje y la exención de
+                        responsabilidad por condiciones médicas no declaradas.
+                    </li>
+                    <li><strong>Obligación a Colaborar:</strong> Comportamiento y colaboración durante el tour.
+                    </li>
+                    <li><strong>Ineficacia de Regulaciones Individuales:</strong> Validez de las cláusulas del
+                        acuerdo.
+                    </li>
+                </ul>
             </div>
+
+            <div class="terms-agreement">
+                <input type="checkbox" id="accept_terms" onchange="toggleConfirmButton()">
+                <label for="accept_terms">Acepto los Términos y Condiciones</label>
+            </div>
+
+            <button id="confirmar_reserva" onclick="confirmarReserva()" style="display: none;">Confirmar reserva y pagar</button>
         </div>
     </div>
+</div>
+
     
     <footer class="mifooter">
         <div class="footer-content">
@@ -253,9 +237,9 @@
                     <!-- wsp -->
                     <a class="social-btn" href="https://wa.me/1234567890" role="button" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     <!-- Google -->
-                    <a class="social-btn" href="mailto:contacto@patagoniaindomia.cl" role="button"><i class="fas fa-envelope"></i></a>
+                    <a class="social-btn" href="mailto:contacto@turismolatropilla.cl" role="button"><i class="fas fa-envelope"></i></a>
                     <!-- Instagram -->
-                    <a class="social-btn" href="https://www.instagram.com/patagoniaindomia/" role="button"><i class="fab fa-instagram"></i></a>
+                    <a class="social-btn" href="#!" role="button"><i class="fab fa-instagram"></i></a>
             </div>
 
             <a class="manual" href="media/manual/Manual.pdf">Nuestro Manual de Usuario</a>
@@ -266,20 +250,82 @@
 
 
     <script>
-        function actualizarPlaceholder() {
-            const docType = document.getElementById("tipo_documento").value;
-            const docNumberInput = document.getElementById("rut_turista");
-            if (docType === "rut") {
-                docNumberInput.placeholder = "Ingrese su Rut chileno";
-            } else if (docType === "pasaporte") {
-                docNumberInput.placeholder = "Ingrese su Pasaporte";
-            }
+        function formatRut(rut) {
+        let valor = rut.replace(/\./g, '').replace(/-/g, '');
+        valor = valor.replace(/[^0-9kK]/g, '');
+        if (valor.length === 0) return '';
+        let dv = valor.slice(-1);
+        let rutNumeros = valor.slice(0, -1);
+        let rutFormateado = '';
+        for (let i = rutNumeros.length; i > 0; i -= 3) {
+            const inicio = Math.max(0, i - 3);
+            rutFormateado = rutNumeros.slice(inicio, i) + 
+                           (rutFormateado ? '.' + rutFormateado : '');
         }
+
+        return rutFormateado + '-' + dv;
+    }
+
+    function formatPasaporte(pasaporte) {
+        let valor = pasaporte.replace(/\s/g, '').toUpperCase();
+        
+        valor = valor.replace(/[^A-Z0-9]/g, '');
+        
+        let pasaporteFormateado = '';
+        for (let i = 0; i < valor.length; i++) {
+            if (i > 0 && i % 3 === 0) {
+                pasaporteFormateado += ' ';
+            }
+            pasaporteFormateado += valor[i];
+        }
+        
+        return pasaporteFormateado;
+    }
+
+    function handleDocumentoInput(event) {
+        const input = event.target;
+        const tipoDoc = document.getElementById('tipo_documento').value;
+        
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const length = input.value.length;
+        
+        if (tipoDoc === 'rut') {
+            input.value = formatRut(input.value);
+        } else {
+            input.value = formatPasaporte(input.value);
+        }
+        
+        const newLength = input.value.length;
+        const position = Math.max(0, start + (newLength - length));
+        input.setSelectionRange(position, position);
+    }
+
+    function actualizarPlaceholder() {
+        const docType = document.getElementById("tipo_documento").value;
+        const docNumberInput = document.getElementById("rut_turista");
+        
+        docNumberInput.value = '';
+        
+        if (docType === "rut") {
+            docNumberInput.placeholder = "Ingrese su Rut chileno";
+            docNumberInput.maxLength = 12; 
+        } else if (docType === "pasaporte") {
+            docNumberInput.placeholder = "Ingrese su Pasaporte";
+            docNumberInput.maxLength = 15; 
+        }
+        
+        docNumberInput.removeEventListener('input', handleDocumentoInput);
+        docNumberInput.addEventListener('input', handleDocumentoInput);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        actualizarPlaceholder();
+    });
     </script>
 
 
     <script id="confirm_terms">
-        // Función para mostrar/ocultar el botón de confirmar reserva
         function toggleConfirmButton() {
             const acceptTerms = document.getElementById('accept_terms').checked;
             const confirmButton = document.getElementById('confirmar_reserva');
@@ -291,9 +337,7 @@
             }
         }
 
-        // Puedes agregar esta función en el archivo JavaScript que ya tienes, o en un script al final del HTML
         document.addEventListener('DOMContentLoaded', function () {
-            // Inicializar el estado del botón cuando se carga la página
             toggleConfirmButton();
         });
 

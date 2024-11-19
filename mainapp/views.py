@@ -7,9 +7,10 @@ from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
 import json
+import mercadopago
+from django.conf import settings
 
-
-
+# Vistas originales
 def index(request):
     return render(request, 'index.html')
 
@@ -50,7 +51,6 @@ def filtro_tours(request):
         tours = tours.filter(precio__lte=precio_maximo)
 
     tours = tours.values()
-
     return JsonResponse(list(tours), safe=False)
 
 def tour_detalle(request, tour_id):
@@ -69,7 +69,6 @@ def tour_detalle(request, tour_id):
     }
     return JsonResponse(response_data)
 
-
 def tour_detalle_pagina(request, tour_id):
     tour = get_object_or_404(Tour, id=tour_id)
     detalles = get_object_or_404(TourDetalle, tour_id=tour_id)
@@ -84,7 +83,9 @@ def tour_detalle_pagina(request, tour_id):
         "ubicacion": tour.ubicacion,
         "precio_adulto": tour.precio,
         "precio_nino": tour.precio_nino,
-        "tour_id": tour.id
+        "tour_id": tour.id,
+        "range": range(1, 7),
+        "ruta_carrusel": "/media/tour_detalle/" + str(tour_id) + "/",
     }
     return render(request, 'tourdetalle.html', context)
 
@@ -92,13 +93,8 @@ def itinerario_api(request, tour_id):
     itinerarios = Itinerario.objects.filter(tour_id=tour_id).values('id', 'hora_inicio', 'hora_final', 'actividad', 'detalle_actividad')
     return JsonResponse(list(itinerarios), safe=False)
 
-
 def confirmar_reserva(request):
     return render(request, 'confirmarreserva.html')
-
-def prueba(request):
-    return render(request, 'prueba.html')
-
 
 @csrf_exempt
 def crear_reserva(request):
@@ -115,58 +111,14 @@ def crear_reserva(request):
             cantidad_ninos=data['cantidad_ninos'],
             nombre_tour=data['nombre_tour'],
             precio_total=data['precio_total'],
-            fecha_reserva=date.today()
+            fecha_reserva=date.today(),
+            estado_pago='pendiente'
         )
-        reserva.save()
-
-        email_subject = '¡Recibimos tu reserva! 🥳 Falta Un Paso Para Confirmar Tu Aventura'
-        email_body = f"""
-    Hola {reserva.nombre_turista},
-
-    Estamos encantados de que hayas elegido explorar con nosotros y nos aseguraremos de que tengas una experiencia inolvidable. A continuación, te confirmamos los detalles de tu reserva:
-
-        Reserva solicitada para:
-         {reserva.nombre_tour}
-
-        Detalles:
-        
-        🔹Nombre del Turista: {reserva.nombre_turista}
-        🔹RUT/Pasaporte: {reserva.rut_turista}
-        🔹Email: {reserva.email_turista}
-
-        🔹Fecha del Tour: {reserva.fecha_tour}
-
-        🔹Dirección de Recogida: {reserva.direccion_recogida}
-        🔹Ciudad de Recogida: {reserva.ciudad_recogida}
-
-        🔹Cantidad de Adultos: {reserva.cantidad_adultos}
-        🔹Cantidad de Niños: {reserva.cantidad_ninos}
-        
-        🔹Precio Total: {reserva.precio_total}
-
-    ⚠️⚠️ Para finalizar el proceso de reserva, es necesario un último paso ⚠️⚠️ te enviaremos un correo con toda la información. Es muy importante que sigas estas instrucciones para confirmar 
-    definitivamente tu participación en el tour.
-
-    Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Queremos que te sientas cómod@ y segur@, sabiendo que estamos aquí para ayudarte en cada paso del camino.
-
-    ¡Nos vemos pronto para comenzar esta maravillosa aventura juntos!
-
-    Saludos cordiales,
-
-    Turismo Patagonia Indomia 
-        """
-
-        email = EmailMessage(
-            email_subject,
-            email_body,
-            'reservas@profeclauvidelas.cl',
-            [reserva.email_turista, 'reservas@profeclauvidelas.cl'],
-        )
-        email.send(fail_silently=False)
-
-        return JsonResponse({'status': 'Reserva creada'}, status=201)
+        return JsonResponse({
+            'status': 'Reserva creada',
+            'reserva_id': reserva.id
+        }, status=201)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
-
 
 @login_required
 def tour_lista(request):
@@ -203,3 +155,165 @@ def tour_delete(request, pk):
         tour.delete()
         return redirect('tour_lista')
     return render(request, 'admin/tour_eliminar_confirmar.html', {'tour': tour})
+
+# Funciones auxiliares para MercadoPago
+def init_mercadopago():
+    return mercadopago.SDK(settings.MERCADOPAGO_ACCESS_TOKEN)
+
+def send_confirmation_email(reserva):
+    email_subject = '¡Tu reserva ha sido confirmada! 🎉 Prepárate para la aventura'
+    email_body = f"""
+    ¡Hola {reserva.nombre_turista}!
+
+    ¡Excelentes noticias! Tu pago ha sido confirmado y tu reserva está lista. Aquí están los detalles de tu aventura:
+
+    🎯 Detalles de la Reserva:
+    
+    Tour: {reserva.nombre_tour}
+    Fecha: {reserva.fecha_tour}
+    
+    📋 Información del Turista:
+    Nombre: {reserva.nombre_turista}
+    RUT/Pasaporte: {reserva.rut_turista}
+    Email: {reserva.email_turista}
+    
+    📍 Punto de Encuentro:
+    Dirección: {reserva.direccion_recogida}
+    Ciudad: {reserva.ciudad_recogida}
+    
+    👥 Participantes:
+    Adultos: {reserva.cantidad_adultos}
+    Niños: {reserva.cantidad_ninos}
+    
+    💰 Pago:
+    Total pagado: ${reserva.precio_total}
+    ID de pago: {reserva.payment_id}
+    
+    🎉 ¡Todo está listo para tu aventura!
+    
+    Recomendaciones:
+    - Llega 10 minutos antes al punto de encuentro
+    - Trae ropa cómoda y apropiada para la actividad
+    - No olvides tu cámara para capturar los momentos especiales
+    
+    Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.
+    
+    ¡Nos vemos pronto!
+    
+    Saludos cordiales,
+    Turismo "La Tropilla"
+    """
+
+    email = EmailMessage(
+        email_subject,
+        email_body,
+        'noreply@turismolatropilla.cl',
+        [reserva.email_turista, 'noreply@turismolatropilla.cl'],
+    )
+    email.send(fail_silently=False)
+
+# Vistas de MercadoPago
+@csrf_exempt
+def create_preference(request):
+    try:
+        data = json.loads(request.body)
+        reserva_id = data.get('reserva_id')
+        reserva = get_object_or_404(Reserva, id=reserva_id)
+
+        preference_data = {
+            "items": [
+                {
+                    "title": f"Reserva Tour - {reserva.nombre_tour}",
+                    "quantity": 1,
+                    "currency_id": "CLP",
+                    "unit_price": float(reserva.precio_total)
+                }
+            ],
+            "back_urls": {
+                "success": f"{settings.BASE_URL}/payment/success/",
+                "failure": f"{settings.BASE_URL}/payment/failure/",
+                "pending": f"{settings.BASE_URL}/payment/pending/"
+            },
+            "auto_return": "approved",
+            "external_reference": str(reserva.id),
+            "notification_url": f"{settings.BASE_URL}/payment/webhook/"
+        }
+
+        mp = init_mercadopago()
+        preference_response = mp.preference().create(preference_data)
+        
+        if preference_response["status"] == 201:
+            reserva.preference_id = preference_response["response"]["id"]
+            reserva.save()
+            return JsonResponse({
+                "id": preference_response["response"]["id"],
+                "init_point": preference_response["response"]["init_point"]
+            })
+        
+        return JsonResponse({"error": "Error al crear la preferencia"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+def payment_success(request):
+    payment_id = request.GET.get('payment_id')
+    status = request.GET.get('status')
+    external_reference = request.GET.get('external_reference')
+    
+    reserva = get_object_or_404(Reserva, id=external_reference)
+    reserva.estado_pago = 'aprobado'
+    reserva.payment_id = payment_id
+    reserva.save()
+    
+    send_confirmation_email(reserva)
+    
+    return render(request, 'pagos/pago_exitoso.html', {
+        'payment_id': payment_id,
+        'reserva': reserva
+    })
+
+def payment_failure(request):
+    external_reference = request.GET.get('external_reference')
+    if external_reference:
+        reserva = get_object_or_404(Reserva, id=external_reference)
+        reserva.estado_pago = 'rechazado'
+        reserva.save()
+    return render(request, 'pagos/pago_fallido.html')
+
+def payment_pending(request):
+    external_reference = request.GET.get('external_reference')
+    if external_reference:
+        reserva = get_object_or_404(Reserva, id=external_reference)
+        reserva.estado_pago = 'pendiente'
+        reserva.save()
+    return render(request, 'pagos/pago_pendiente.html')
+
+@csrf_exempt
+def payment_webhook(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            if data.get('type') == 'payment':
+                payment_id = data.get('data.id')
+                mp = init_mercadopago()
+                payment_info = mp.payment().get(payment_id)
+                
+                if payment_info["status"] == 200:
+                    payment_data = payment_info["response"]
+                    reserva = Reserva.objects.get(id=payment_data["external_reference"])
+                    
+                    if payment_data["status"] == "approved":
+                        reserva.estado_pago = 'aprobado'
+                        reserva.payment_id = payment_id
+                        reserva.save()
+                        send_confirmation_email(reserva)
+                    elif payment_data["status"] == "rejected":
+                        reserva.estado_pago = 'rechazado'
+                        reserva.save()
+                    
+                    return JsonResponse({"status": "success"})
+            
+            return JsonResponse({"status": "ignored"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)

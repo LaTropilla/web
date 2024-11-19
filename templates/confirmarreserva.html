@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirma tu reserva</title>
     {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traslados</title>
+    <link rel="stylesheet" href="{% static 'estilos/styles.css' %}">
     <link rel="stylesheet" href="{% static 'estilos/style-reserva.css' %}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Oswald:wght@400;700&family=Bebas+Neue&family=Abril+Fatface&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
 </head>
-
 <body>
+    <header>
+        <div class="container-hero">
+            <div class="container hero">
+                <div class="logo">
+                    <img src="/static/imagenes/index/logoverde.png" alt="Logo de la empresa">
+                </div>                
+                        <ul class="menu">
+                            <li><a href="{% url 'index' %}">Inicio</a></li>
+                            <li><a href="{% url 'tourshtml' %}">Tours</a></li>
+                            <li><a href="">Traslados</a></li>
+                            <li><a href="{% url 'sobrenosotroshtml' %}">Sobre Nosotros</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
     <h1>Confirmación de Reserva</h1>
 
     <div class="datos-container">
@@ -34,7 +51,7 @@
             <p>Ciudad de Recogida: <span id="ciudad_recogida"></span></p>
         </div>
     </div>
-    
+
     <div>
         <h2>Por favor, revisa que tu dirección esté correcta. No queremos que te pierdas la aventura por no encontrarnos. ¡Nos vemos pronto!</h2>
     </div>
@@ -224,7 +241,7 @@
 
             window.onload = initMap;
         });
-    </script>
+    </script>  
 </body>
 
 </html>
